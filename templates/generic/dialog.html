@@ -1,0 +1,35 @@
+{% extends "generic/main.html" %}
+{% load macros %}
+
+{% macro title %}
+{% block title %}{% block dialog_title %}{% endblock %}{% endblock %}
+{% endmacro %}
+
+{% block main_title %}{% usemacro title %}{% endblock %}
+
+{% block main_content %}
+<div class="page-title dark-background"></div>
+
+<section id="faq" class="faq section">
+    <div class="container section-title">
+        <span>{% usemacro title %}</span>
+        <h2>{% usemacro title %}</h2>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+            </div>
+            <div class="col-lg-6">
+                {% include 'generic/messages.html' %}
+                <div class="card p-4">
+                    {% block dialog_content %}
+                    {% endblock %}
+                </div>
+            </div>
+            <div class="col-lg-3">
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

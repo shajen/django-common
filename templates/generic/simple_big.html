@@ -1,0 +1,25 @@
+{% extends "generic/main.html" %}
+{% load macros %}
+
+{% macro title %}
+{% block title %}{% block simple_title %}{% endblock %}{% endblock %}
+{% endmacro %}
+
+{% block main_title %}{% usemacro title %}{% endblock %}
+
+{% block main_content %}
+<div class="page-title dark-background"></div>
+
+<section class="section p-0">
+    <div class="container-fluid section-title m-2 p-0">
+        <span>{% usemacro title %}</span>
+        <h2>{% usemacro title %}</h2>
+    </div>
+
+    <div class="container-fluid">
+        {% include 'generic/messages.html' %}
+        {% block simple_content %}
+        {% endblock %}
+    </div>
+</section>
+{% endblock %}

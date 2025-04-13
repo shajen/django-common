@@ -1,9 +1,5 @@
-from django import forms
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
 
@@ -28,12 +24,3 @@ def language(request, language):
             samesite=settings.LANGUAGE_COOKIE_SAMESITE,
         )
     return response
-
-
-class CustomAuthenticationForm(AuthenticationForm):
-    username = forms.CharField(label=_("USERNAME OR EMAIL"))
-
-
-@login_required
-def account(request):
-    return render(request, "account/account.html")

@@ -1,10 +1,12 @@
 from django.urls import path
-import common.views
+import common.views_account
 import django.contrib.auth.views
 
 urlpatterns = [
-    path("", common.views.account, name="account"),
-    path("login/", django.contrib.auth.views.LoginView.as_view(template_name="account/login.html", authentication_form=common.views.CustomAuthenticationForm), name="login"),
+    path("", common.views_account.account, name="account"),
+    path(
+        "login/", django.contrib.auth.views.LoginView.as_view(template_name="account/login.html", authentication_form=common.views_account.CustomAuthenticationForm), name="login"
+    ),
     path("logout/", django.contrib.auth.views.LogoutView.as_view(), name="logout"),
     path("password/change/", django.contrib.auth.views.PasswordChangeView.as_view(template_name="account/password_change.html"), name="password_change"),
     path("password/change/done/", django.contrib.auth.views.PasswordChangeDoneView.as_view(template_name="account/password_change_done.html"), name="password_change_done"),

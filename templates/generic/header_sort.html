@@ -1,6 +1,6 @@
 {% load custom_filters %}
 
-<th scope="col">
+<th class="{% if col %}col-md-{{ col }}{% else %}col{% endif %}">
     <div>
         <a href="{% url_with_param 'order_by' field ',' %}"><i class="bi-sort-down-alt"></i></a>
         <a href="{% url_with_param 'order_by' '-'|add:field ',' %}"><i class="bi-sort-up"></i></a>

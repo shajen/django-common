@@ -16,12 +16,13 @@ def filter(request, qs):
     fields = get_fields(qs)
     filters_fields = {}
     for key, value in request.GET.items():
-        field = key.split("__")[0]
-        if field in fields:
-            if isinstance(fields[field], DurationField):
-                filters_fields[key] = datetime.timedelta(seconds=int(value))
-            else:
-                filters_fields[key] = value
+        if value:
+            field = key.split("__")[0]
+            if field in fields:
+                if isinstance(fields[field], DurationField):
+                    filters_fields[key] = datetime.timedelta(seconds=int(value))
+                else:
+                    filters_fields[key] = value
     return qs.filter(**filters_fields)
 
 

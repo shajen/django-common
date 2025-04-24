@@ -12,6 +12,14 @@ def get_fields(qs):
     return fields
 
 
+def get_options_lists(request, qs, keys):
+    options_lists = {}
+    for key in keys:
+        options = qs.values_list(key, flat=True).distinct().order_by(key)
+        options_lists[key + "_options"] = sorted(list(options))
+    return options_lists
+
+
 def filter(request, qs):
     fields = get_fields(qs)
     filters_fields = {}

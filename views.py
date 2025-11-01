@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 def load_settings(request):
     return {
         "LANGUAGES": settings.LANGUAGES,
+        "TITLE_CLASS": settings.TITLE_CLASS,
     }
 
 

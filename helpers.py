@@ -12,3 +12,7 @@ def file_response(filename, download_filename=None, remove=True):
     if remove:
         os.remove(filename)
     return response
+
+
+def is_json_request(request):
+    return "application/json" in request.headers.get("Accept", "")

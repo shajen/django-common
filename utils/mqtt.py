@@ -39,8 +39,8 @@ class MqttSyncClient:
         self.__logger = logging.getLogger("MQTT")
         self.__client = get_client(url, user, password, client_id, self)
         self.__client.on_message = MqttSyncClient.__on_message
-        self.__client.on_connect = MqttSyncClient.on_connect
-        self.__client.on_disconnect = MqttSyncClient.on_disconnect
+        self.__client.on_connect = MqttSyncClient.__on_connect
+        self.__client.on_disconnect = MqttSyncClient.__on_disconnect
         self.__event = threading.Event()
         self.__response_topic = None
         self.__response_data = None
@@ -74,19 +74,25 @@ class MqttSyncClient:
         self.__response_data = message.payload.decode("utf-8")
         self.__event.set()
 
-    def on_connect(client, user_data, flags, rc):
+    def __on_connect(client, user_data, flags, rc):
         self = user_data
         self.__logger.info("connected")
 
-    def on_disconnect(client, user_data, flags):
+    def __on_disconnect(client, user_data, flags):
         self = user_data
         self.__logger.info("disconnected")
 
-    def __enter__(self):
+    def start(self):
         self.__client.loop_start()
+
+    def stop(self):
+        self.__client.loop_stop()
+        self.__client.disconnect()
+
+    def __enter__(self):
+        self.start()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.__client.loop_stop()
-        self.__client.disconnect()
+        self.stop()
         return False

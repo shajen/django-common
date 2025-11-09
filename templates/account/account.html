@@ -1,9 +1,9 @@
 {% extends "generic/dialog.html" %}
 {% load i18n %}
 
-{% block dialog_title %}{% trans "INFORMATION" %}{% endblock %}
+{% block simple_title %}{% trans "INFORMATION" %}{% endblock %}
 
-{% block dialog_content %}
+{% block simple_content %}
 <div class="text-center">
     <p>{% blocktrans with username=user.username %}WELCOME_USER_MESSAGE {{ username }}{% endblocktrans %}</p>
     <p><a class="btn btn-primary" href="{% url 'password_change' %}">{% trans "CHANGE PASSWORD" %}</a></p>

@@ -2,9 +2,9 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 
-{% block dialog_title %}{% trans "SIGN IN" %}{% endblock %}
+{% block simple_title %}{% trans "SIGN IN" %}{% endblock %}
 
-{% block dialog_content %}
+{% block simple_content %}
 <form method="post">
     {% csrf_token %}
     {{ form|crispy }}

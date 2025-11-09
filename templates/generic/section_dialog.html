@@ -2,7 +2,7 @@
 {% load macros %}
 
 {% macro title %}
-{% block title %}{% block simple_title %}{% endblock %}{% endblock %}
+{% block title %}{% block section_title %}{% endblock %}{% endblock %}
 {% endmacro %}
 
 {% block main_title %}{% usemacro title %}{% endblock %}
@@ -24,7 +24,7 @@
                 <div class="col-lg-6">
                     {% include 'generic/messages.html' %}
                     <div class="card p-4">
-                        {% block simple_content %}
+                        {% block section_content %}
                         {% endblock %}
                     </div>
                 </div>

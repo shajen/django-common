@@ -1,10 +1,10 @@
-{% extends "generic/dialog.html" %}
+{% extends "generic/section_dialog.html" %}
 {% load i18n %}
 {% load crispy_forms_tags %}
 
-{% block simple_title %}{% trans "SIGN IN" %}{% endblock %}
+{% block section_title %}{% trans "SIGN IN" %}{% endblock %}
 
-{% block simple_content %}
+{% block section_content %}
 <form method="post">
     {% csrf_token %}
     {{ form|crispy }}

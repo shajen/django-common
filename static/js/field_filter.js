@@ -15,7 +15,7 @@ function onChange(id) {
 }
 
 function updateFieldsFilter() {
-    $.datetimepicker.setLocale('pl');
+    $.datetimepicker.setLocale($('html').attr('lang'));
     params = new URLSearchParams(window.location.search);
     for (p of params) {
         field = $("#input_" + p[0]);

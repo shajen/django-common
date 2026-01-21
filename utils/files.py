@@ -1,26 +1,47 @@
-from django.http import HttpResponse, HttpResponseServerError
-import io
+from django.http import StreamingHttpResponse
+import gzip
 import os
+import queue
 import tarfile
+import threading
+
+
+class QueueBuffer:
+    def __init__(self, q):
+        self.q = q
+
+    def write(self, data):
+        if data:
+            self.q.put(data)
 
 
 def get_directory_as_archive_response(dirs, archive_name):
-    buffer = io.BytesIO()
-    with tarfile.open(fileobj=buffer, mode="w:gz") as tar:
-        for dir in dirs:
-            if type(dir) is tuple:
-                dir, name = dir
-                dir = dir.removesuffix("/")
-            else:
-                dir = dir.removesuffix("/")
-                name = os.path.basename(dir)
-            if not os.path.isdir(dir):
-                raise Exception("Expected log directory %s found." % dir)
-            tar.add(dir, name)
-    buffer.seek(0)
+    q = queue.Queue(maxsize=100)
 
-    response = HttpResponse(buffer.getvalue(), content_type="application/gzip")
-    response["Content-Disposition"] = 'attachment; filename="%s.tar.gz"' % archive_name
-    response["Content-Length"] = str(buffer.getbuffer().nbytes)
+    def produce_tar():
+        raw_stream = QueueBuffer(q)
+        with gzip.GzipFile(fileobj=raw_stream, mode="wb", compresslevel=1) as gz_sock:
+            with tarfile.open(fileobj=gz_sock, mode="w|") as tar:
+                for item in dirs:
+                    if isinstance(item, tuple):
+                        path, name = item
+                    else:
+                        path = item.rstrip("/")
+                        name = os.path.basename(path)
 
+                    if os.path.isdir(path):
+                        tar.add(path, name)
+        q.put(None)
+
+    def file_iterator():
+        thread = threading.Thread(target=produce_tar)
+        thread.start()
+        while True:
+            chunk = q.get()
+            if chunk is None:
+                break
+            yield chunk
+
+    response = StreamingHttpResponse(file_iterator(), content_type="application/gzip")
+    response["Content-Disposition"] = f'attachment; filename="{archive_name}.tar.gz"'
     return response

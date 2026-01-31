@@ -1,5 +1,5 @@
-import datetime
 from django.db.models import DurationField
+from django.utils.dateparse import parse_duration
 
 
 def get_fields(qs):
@@ -28,7 +28,7 @@ def filter(request, qs):
             field = key.split("__")[0]
             if field in fields:
                 if isinstance(fields[field], DurationField):
-                    filters_fields[key] = datetime.timedelta(seconds=int(value))
+                    filters_fields[key] = parse_duration(value)
                 else:
                     filters_fields[key] = value
     return qs.filter(**filters_fields)

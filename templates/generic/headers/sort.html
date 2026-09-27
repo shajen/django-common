@@ -1,9 +1,9 @@
 {% load custom_filters %}
 
 <th class="{% if col %}col-md-{{ col }}{% else %}col{% endif %}">
-    <div>
+    <div class="d-inline-flex align-items-center gap-1">
         <a href="{% url_with_param 'order_by' field ',' %}"><i class="bi-sort-down-alt"></i></a>
         <a href="{% url_with_param 'order_by' '-'|add:field ',' %}"><i class="bi-sort-up"></i></a>
+        <span>{{ name }}</span>
     </div>
-    {{ name }}
 </th>
